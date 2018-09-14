@@ -46,20 +46,17 @@ module JavaBuildpack
 
 
         pom_path = Dir.glob("#{@droplet.root}/**/pom.xml")[0]
-        puts "testssssssss #{pom_path}"
         uri = URI.parse(SNYK_API_URL)
-        puts "testssssssss 2"
         req = Net::HTTP::Post.new(uri.to_s)
-        puts "testssssssss 3"
         https = Net::HTTP.new(uri.host,uri.port)
-        puts "testssssssss 4"
         https.use_ssl = true
-        puts "testssssssss 5"
         req['Content-Type'] = 'application/json'
         req['Authorization'] = 'token ' + @application.environment["SNYK_TOKEN"]
-        puts "testssssssss 6"
-        data = File.read(pom_path)
-        puts "testssssssss 7"
+        if (pom_path) then
+          data = File.read(pom_path)
+        else
+          data = ""
+        end
         test_request = {
           'encoding' => 'plain',
           'files' => {
@@ -68,9 +65,7 @@ module JavaBuildpack
               },
           }
         }
-        puts "testssssssss 8"
         test_request['files']['target']['contents'] = data
-        puts "testssssssss 9"
 
         additional = []
         jars = Dir.glob("#{@droplet.root}/WEB-INF/**/*.jar")
