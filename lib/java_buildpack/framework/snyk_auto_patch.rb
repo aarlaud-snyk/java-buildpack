@@ -79,10 +79,11 @@ module JavaBuildpack
             end
         end
         # if no main pom found, poping first pom from jar files as main pom in API request
-        if (data) == "" then
+        if data.empty then
           data = additional[0]
           additional.drop(1)
         end
+        puts "data is #{data}"
         test_request['files']['target']['contents'] = data
         test_request['files']['additional'] = additional;
         req.body = test_request.to_json
