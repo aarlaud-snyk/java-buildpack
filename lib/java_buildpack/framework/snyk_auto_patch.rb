@@ -52,11 +52,13 @@ module JavaBuildpack
         https.use_ssl = true
         req['Content-Type'] = 'application/json'
         req['Authorization'] = 'token ' + @application.environment["SNYK_TOKEN"]
+        puts "trace1"
         if (pom_path) then
           data = File.read(pom_path)
         else
           data = ""
         end
+        puts "trace2"
         test_request = {
           'encoding' => 'plain',
           'files' => {
@@ -66,7 +68,7 @@ module JavaBuildpack
           }
         }
         test_request['files']['target']['contents'] = data
-
+        puts "trace3"
         additional = []
         jars = Dir.glob("#{@droplet.root}/WEB-INF/**/*.jar")
         jars.each do |jar|
@@ -80,7 +82,7 @@ module JavaBuildpack
             end
         end
         test_request['files']['additional'] = additional;
-
+        puts "trace4"
         req.body = test_request.to_json
         response = https.request(req)
         res = JSON.parse(response.body)
