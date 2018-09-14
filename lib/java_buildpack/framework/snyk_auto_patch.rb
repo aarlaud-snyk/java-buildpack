@@ -84,7 +84,8 @@ module JavaBuildpack
         test_request['files']['additional'] = additional;
         puts "trace4a"
         req.body = test_request.to_json
-        puts "trace4b"
+        puts "trace4b #{req.body}"
+        puts "trace4bb #{req}"
         response = https.request(req)
         puts "trace4c"
         res = JSON.parse(response.body)
