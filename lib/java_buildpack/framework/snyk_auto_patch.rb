@@ -46,7 +46,7 @@ module JavaBuildpack
 
 
         pom_path = Dir.glob("#{@droplet.root}/**/pom.xml")[0]
-        puts "testssssssss 1"
+        puts "testssssssss #{pom_path}"
         uri = URI.parse(SNYK_API_URL)
         puts "testssssssss 2"
         req = Net::HTTP::Post.new(uri.to_s)
