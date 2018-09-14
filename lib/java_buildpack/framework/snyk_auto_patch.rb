@@ -79,7 +79,7 @@ module JavaBuildpack
             end
         end
         # if no main pom found, poping first pom from jar files as main pom in API request
-        if data.empty then
+        if data.empty? then
           data = additional[0]
           additional.drop(1)
         end
