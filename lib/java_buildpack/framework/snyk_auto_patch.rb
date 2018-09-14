@@ -74,15 +74,17 @@ module JavaBuildpack
                 poms = jar_pom_path.split("\n")
                 poms.each do |pom|
                     pom_content = `unzip -p #{jar} #{pom}`
-                    additional.push({"contents" => pom_content})
+                    if data.empty? then
+                      data = pom_content
+                    else
+                      additional.push({"contents" => pom_content})
+                    end
+
                 end
             end
         end
         # if no main pom found, poping first pom from jar files as main pom in API request
-        if data.empty? then
-          data = additional[0]
-          additional.drop(1)
-        end
+
         puts "data is #{data}"
         test_request['files']['target']['contents'] = data
         test_request['files']['additional'] = additional;
