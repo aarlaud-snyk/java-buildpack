@@ -42,6 +42,9 @@ module JavaBuildpack
       # (see JavaBuildpack::Component::BaseComponent#compile)
       # This is to change the FS
       def compile
+
+        puts "testssssssss"
+
         pom_path = Dir.glob("#{@droplet.root}/**/pom.xml")[0]
         uri = URI.parse(SNYK_API_URL)
         req = Net::HTTP::Post.new(uri.to_s)
@@ -51,11 +54,11 @@ module JavaBuildpack
         req['Authorization'] = 'token ' + @application.environment["SNYK_TOKEN"]
         data = File.read(pom_path)
         test_request = {
-          'encoding' => 'plain', 
+          'encoding' => 'plain',
           'files' => {
               'target' => {
                 "contents": ""
-              },              
+              },
           }
         }
         test_request['files']['target']['contents'] = data
@@ -64,7 +67,7 @@ module JavaBuildpack
         jars = Dir.glob("#{@droplet.root}/WEB-INF/**/*.jar")
         jars.each do |jar|
             jar_pom_path = `unzip -Z1 #{jar} | grep "pom.xml"`
-            if (jar_pom_path.length) > 0 then        
+            if (jar_pom_path.length) > 0 then
                 poms = jar_pom_path.split("\n")
                 poms.each do |pom|
                     pom_content = `unzip -p #{jar} #{pom}`
@@ -90,19 +93,19 @@ module JavaBuildpack
           vulns.sort! do |vuln_a, vuln_b|
               vulna_map = severityMap[vuln_a['severity']]
               vulnb_map = severityMap[vuln_b['severity']]
-              if (vulna_map > vulnb_map) 
+              if (vulna_map > vulnb_map)
                 1
-              elsif (vulna_map < vulnb_map) 
+              elsif (vulna_map < vulnb_map)
                 -1
               else
                 0
               end
           end
           puts "\nFounded #{vulns.length} vulnerabilities on #{res['dependencyCount']} dependencies\n"
-          vulns.each do |vuln| 
+          vulns.each do |vuln|
               severity = vuln['severity']
               if (severity == 'high') then
-                  color = "\e[31m"            
+                  color = "\e[31m"
               elsif (severity == 'medium') then
                   color = "\e[1;33m"
               else
@@ -112,8 +115,8 @@ module JavaBuildpack
               puts "  Description: #{severity} severity vulnerabiltity found in #{vuln['package']}"
               puts "  Info: #{vuln['url']}"
               puts "  Introduce through: #{vuln['from'][0]}\n"
-          end 
-          
+          end
+
           raise "Terminating droplet compilation as Snyk detected vulnerabilties..."
         end
       end
