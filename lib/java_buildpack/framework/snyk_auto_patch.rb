@@ -82,9 +82,11 @@ module JavaBuildpack
             end
         end
         test_request['files']['additional'] = additional;
-        puts "trace4"
+        puts "trace4a"
         req.body = test_request.to_json
+        puts "trace4b"
         response = https.request(req)
+        puts "trace4c"
         res = JSON.parse(response.body)
         puts "trace5"
         if res['ok'] then
