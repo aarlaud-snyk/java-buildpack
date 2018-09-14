@@ -74,6 +74,7 @@ module JavaBuildpack
                 poms = jar_pom_path.split("\n")
                 poms.each do |pom|
                     pom_content = `unzip -p #{jar} #{pom}`
+                    # if no main pom files were found, using pom from first jar file as main pom for API call.
                     if data.empty? then
                       data = pom_content
                     else
@@ -83,15 +84,11 @@ module JavaBuildpack
                 end
             end
         end
-        # if no main pom found, poping first pom from jar files as main pom in API request
-
-        puts "data is #{data}"
         test_request['files']['target']['contents'] = data
         test_request['files']['additional'] = additional;
         req.body = test_request.to_json
         response = https.request(req)
         res = JSON.parse(response.body)
-        puts "trace5 #{res}"
         if res['ok'] then
           puts "Tested #{res['dependencyCount']} 0 vulnerabilties were found!"
         else
