@@ -89,7 +89,7 @@ module JavaBuildpack
         response = https.request(req)
         puts "trace4c"
         res = JSON.parse(response.body)
-        puts "trace5"
+        puts "trace5 #{res}"
         if res['ok'] then
           puts "Tested #{res['dependencyCount']} 0 vulnerabilties were found!"
         else
