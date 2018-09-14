@@ -86,6 +86,7 @@ module JavaBuildpack
         req.body = test_request.to_json
         response = https.request(req)
         res = JSON.parse(response.body)
+        puts "trace5"
         if res['ok'] then
           puts "Tested #{res['dependencyCount']} 0 vulnerabilties were found!"
         else
@@ -125,6 +126,7 @@ module JavaBuildpack
 
           raise "Terminating droplet compilation as Snyk detected vulnerabilties..."
         end
+        puts "trace6"
       end
 
       # (see JavaBuildpack::Component::BaseComponent#release)
